@@ -467,6 +467,15 @@ Marker: {
 			});
 		}
 
+		if (this.draggable) {
+			GEvent.addListener(gmarker, 'dragstart', function(latlng) {
+				me.dragStarted.fire({'location': new mxn.LatLonPoint(latlng.lat(), latlng.lng())});
+			})
+			GEvent.addListener(gmarker, 'dragend', function(latlng) {
+				me.dragEnded.fire({'location': new mxn.LatLonPoint(latlng.lat(), latlng.lng())});
+			})
+		}
+
 		return gmarker;
 	},
 
