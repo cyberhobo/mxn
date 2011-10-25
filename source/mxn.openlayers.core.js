@@ -19,6 +19,9 @@ mxn.register('openlayers', {
 			// initialize layers map (this was previously in mxn.core.js)
 			this.layers = {};
 
+			// If/when we require openlayers 2.10 the mapnik layer can be added in one line:
+			// this.layers.osmmapnik = new OpenLayers.Layer.OSM.Mapnik( 'OSM Mapnik' );
+
 			this.layers.osmmapnik = new OpenLayers.Layer.TMS(
 				'OSM Mapnik',
 				[
@@ -50,37 +53,6 @@ mxn.register('openlayers', {
 				}
 			);
 
-			this.layers.osm = new OpenLayers.Layer.TMS(
-				'OSM',
-				[
-					"http://a.tah.openstreetmap.org/Tiles/tile.php/",
-					"http://b.tah.openstreetmap.org/Tiles/tile.php/",
-					"http://c.tah.openstreetmap.org/Tiles/tile.php/"
-				],
-				{
-					type:'png',
-					getURL: function (bounds) {
-						var res = this.map.getResolution();
-						var x = Math.round ((bounds.left - this.maxExtent.left) / (res * this.tileSize.w));
-						var y = Math.round ((this.maxExtent.top - bounds.top) / (res * this.tileSize.h));
-						var z = this.map.getZoom();
-						var limit = Math.pow(2, z);
-						if (y < 0 || y >= limit) {
-							return null;
-						} else {
-							x = ((x % limit) + limit) % limit;
-							var path = z + "/" + x + "/" + y + "." + this.type;
-							var url = this.url;
-							if (url instanceof Array) {
-								url = this.selectUrl(path, url);
-							}
-							return url + path;
-						}
-					},
-					displayOutsideMaxExtent: true
-				}
-			);
-			
 			// deal with click
 			map.events.register('click', map, function(evt){
 				var lonlat = map.getLonLatFromViewPortPx(evt.xy);
@@ -115,7 +87,6 @@ mxn.register('openlayers', {
 			}
 			
 			map.addLayer(this.layers.osmmapnik);
-			map.addLayer(this.layers.osm);
 			this.maps[api] = map;
 			this.loaded[api] = true;
 		},
