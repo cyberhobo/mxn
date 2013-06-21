@@ -43,6 +43,7 @@ Mapstraction: {
 					}
 					if (this.addControlsArgs.zoom == 'large') {
 						myOptions.zoomControlOptions = {style: google.maps.ZoomControlStyle.LARGE};
+						myOptions.panControl = true;
 					}
 				}
 				if (this.addControlsArgs.map_type) {
